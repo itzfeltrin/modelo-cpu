@@ -28,14 +28,19 @@ public class Decodificador {
         this.aDecodificar = frase;
         this.aDecodificar = this.aDecodificar.replaceAll(", ", " ");
         String[] split = this.aDecodificar.split(" ");
-        if(split[0].toUpperCase().equals("MOV")){
-            mover(split[1], split[2]);
+        if(split[1].charAt(0) != 'r' && split[1].charAt(0) != 'R'){
+            throw new Exception("Comando inválido!");
         }
-        else if(split[0].toUpperCase().equals("ADD")){
-            somar(split[1], split[2]);
-        }        
-        else if(split[0].toUpperCase().equals("SUB")){
-            subtrair(split[1], split[2]);
+        else {
+            if(split[0].toUpperCase().equals("MOV")){
+                mover(split[1], split[2]);
+            }
+            else if(split[0].toUpperCase().equals("ADD")){
+                somar(split[1], split[2]);
+            }        
+            else if(split[0].toUpperCase().equals("SUB")){
+                subtrair(split[1], split[2]);
+            }
         }
     }
     
@@ -43,17 +48,24 @@ public class Decodificador {
         int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));        
         operando2 = operando2.replaceAll("#", "");        
         this.proc.registradores[index1].setValor(Double.parseDouble(operando2));
+        this.proc.registradores[index1].setUsed();
     }
     
     public void somar(String operando1, String operando2) throws Exception{        
         int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));
-        int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));
-        this.proc.registradores[index1].setValor(this.proc.registradores[index1].getValor() + this.proc.registradores[index2].getValor());
+        if(operando2.charAt(0) == 'R' || operando2.charAt(0) == 'r'){
+            int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));
+            this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() + (Double) this.proc.registradores[index2].getValor());
+        }
+        else {
+            operando2 = operando2.replaceAll("#", "");
+            this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() + Double.parseDouble(operando2));
+        }
     }
     
     public void subtrair(String operando1, String operando2) throws Exception{        
         int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));
         int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));
-        this.proc.registradores[index1].setValor(this.proc.registradores[index1].getValor() - this.proc.registradores[index2].getValor());
+        this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() - (Double) this.proc.registradores[index2].getValor());
     }
 }

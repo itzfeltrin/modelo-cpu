@@ -5,6 +5,8 @@
  */
 package modelocpu;
 
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import modeloProcessador.Processador;
 
 /**
@@ -19,7 +21,8 @@ public class TelaMain extends javax.swing.JFrame {
         try {
             initComponents();
             setResizable(false);
-            setLocationRelativeTo(null);        
+            setLocationRelativeTo(null);  
+            setTitle("Compiler");
             this.proc = new Processador();
 
             attLblsRegistradores();
@@ -69,21 +72,32 @@ public class TelaMain extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         errorLbl = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        reset = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
+        jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
+
         txtArea.setColumns(20);
-        txtArea.setFont(new java.awt.Font("Microsoft YaHei", 0, 18)); // NOI18N
+        txtArea.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         txtArea.setRows(5);
+        txtArea.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAreaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtArea);
 
         jLabel2.setFont(new java.awt.Font("Microsoft YaHei Light", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("INSTRUÇÕES (separe cada instrução por ;)");
+        jLabel2.setText("INSTRUÇÕES");
 
         jButton1.setText("RUN");
+        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -305,11 +319,27 @@ public class TelaMain extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        reset.setText("Reset");
+        reset.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        reset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resetMouseClicked(evt);
+            }
+        });
+        reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(reset);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -327,20 +357,54 @@ public class TelaMain extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String texto = txtArea.getText();
+        String[] instrucoes = texto.split("\n");
+        
         try {        
-            this.proc.decodificador.decodificar(texto);
+            for(int i = 0; i < instrucoes.length; i++){
+                this.proc.decodificador.decodificar(instrucoes[i]);
+            }
         } catch (Exception ex) {
             errorLbl.setText(ex.getMessage());;
         }
         attLblsRegistradores();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String texto = txtArea.getText();
+            texto = texto + "\n";
+            txtArea.setText(texto);
+        }
+    }//GEN-LAST:event_txtAreaKeyPressed
+
+    private void resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetActionPerformed
+               
+    }//GEN-LAST:event_resetActionPerformed
+
+    private void resetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetMouseClicked
+        Object[] options = {"Sim", "Não"};
+        int opcao = JOptionPane.showOptionDialog(null, "Tem certeza?", "Alerta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if(opcao == 0){
+            this.dispose();
+            TelaMain tm = new TelaMain();
+            tm.setVisible(true);
+        }
+    }//GEN-LAST:event_resetMouseClicked
+
     public void attLblsRegistradores(){
         javax.swing.JLabel[] labels = {valorR0, valorR1, valorR2, valorR3, valorR4, valorR5, valorR6, valorR7};
-        double valores[] = this.proc.getValoresRegistradores();
+        Object valores[] = this.proc.getValoresRegistradores();
         for(int i = 0; i < 8; i++){
-            double valor = valores[i];
-            String texto = String.format("%.2f", valor);
+            double valor;
+            String texto;
+            if(valores[i] != null){
+                valor = (Double) valores[i];
+                texto = String.format("%.2f", valor);
+            }
+            else {
+                texto = "NULL";
+            }
+            
             labels[i].setText(texto);
         }
     }
@@ -400,9 +464,11 @@ public class TelaMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenu reset;
     private javax.swing.JTextArea txtArea;
     private javax.swing.JLabel valorR0;
     private javax.swing.JLabel valorR1;

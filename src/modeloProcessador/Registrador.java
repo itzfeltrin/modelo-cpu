@@ -11,16 +11,27 @@ package modeloProcessador;
  */
 public class Registrador {
     private double valor;
+    private boolean used;
     
     Registrador(){
         this.valor = 0.00;
+        this.used = false;
     }
     
-    public double getValor(){
-        return this.valor;
+    public Object getValor(){
+        if(!this.used){
+            return null;
+        }
+        else {
+            return this.valor;
+        }
     }
     
     public void setValor(double valor){
         this.valor = valor;
+    }
+    
+    public void setUsed(){
+        this.used = true;
     }
 }

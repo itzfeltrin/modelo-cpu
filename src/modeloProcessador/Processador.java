@@ -20,8 +20,8 @@ public class Processador {
         }
     }
     
-    public double[] getValoresRegistradores(){
-        double[] valores = new double[8];
+    public Object[] getValoresRegistradores(){
+        Object[] valores = new Object[8];
         for(int i = 0; i < 8; i++){
             valores[i] = this.registradores[i].getValor();
         }
