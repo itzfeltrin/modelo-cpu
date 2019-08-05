@@ -15,6 +15,7 @@ import modeloProcessador.Processador;
  */
 public class TelaMain extends javax.swing.JFrame {
 
+    private String currentText;
     public Processador proc;
     
     public TelaMain() {
@@ -372,8 +373,8 @@ public class TelaMain extends javax.swing.JFrame {
     private void txtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String texto = txtArea.getText();
-            texto = texto + "\n";
-            txtArea.setText(texto);
+            this.currentText = this.currentText + texto;
+            this.currentText = this.currentText + "\n";            
         }
     }//GEN-LAST:event_txtAreaKeyPressed
 

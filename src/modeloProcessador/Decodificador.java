@@ -64,8 +64,14 @@ public class Decodificador {
     }
     
     public void subtrair(String operando1, String operando2) throws Exception{        
-        int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));
-        int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));
-        this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() - (Double) this.proc.registradores[index2].getValor());
+        int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));        
+        if(operando2.charAt(0) == 'R' || operando2.charAt(0) == 'r'){
+            int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));
+            this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() - (Double) this.proc.registradores[index2].getValor());
+        }
+        else {
+            operando2 = operando2.replaceAll("#", "");
+            this.proc.registradores[index1].setValor((Double) this.proc.registradores[index1].getValor() - Double.parseDouble(operando2));
+        }
     }
 }
