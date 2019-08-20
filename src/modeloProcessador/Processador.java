@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import modeloMemoria.MP;
 import modeloMemoria.MemoriaCache;
-import modelocpu.TelaMain;
+import application.TelaMain;
 
 /**
  *
