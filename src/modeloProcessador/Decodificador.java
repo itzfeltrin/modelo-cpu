@@ -6,7 +6,7 @@
 package modeloProcessador;
 
 import javax.swing.JOptionPane;
-import modelocpu.TelaMain;
+import application.TelaMain;
 
 /**
  *
@@ -54,9 +54,17 @@ public class Decodificador {
 
     public void mover(String operando1, String operando2) {
         int index1 = Integer.parseInt(Character.toString(operando1.charAt(1)));
-        operando2 = operando2.replaceAll("#", "");
-        this.proc.registradores[index1].setValor(Double.parseDouble(operando2));
-        this.proc.registradores[index1].setUsed();
+        if (operando2.charAt(0) == 'R' || operando2.charAt(0) == 'r') {
+            System.out.println("operando 1: " + operando1 + " operando 2: " + operando2);
+            int index2 = Integer.parseInt(Character.toString(operando2.charAt(1)));            
+            this.proc.registradores[index1].setValor((Double) this.proc.registradores[index2].getValor());
+            this.proc.registradores[index1].setUsed();
+            System.out.println("valor no registrador " + index1 + ": " + (Double) this.proc.registradores[index1].getValor());
+        } else {
+            operando2 = operando2.replaceAll("#", "");
+            this.proc.registradores[index1].setValor(Double.parseDouble(operando2));
+            this.proc.registradores[index1].setUsed();
+        }
     }
 
     public void somar(String operando1, String operando2) throws Exception {
