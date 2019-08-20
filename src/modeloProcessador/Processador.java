@@ -5,6 +5,12 @@
  */
 package modeloProcessador;
 
+import java.util.ArrayList;
+import java.util.List;
+import modeloMemoria.MP;
+import modeloMemoria.MemoriaCache;
+import modelocpu.TelaMain;
+
 /**
  *
  * @author itzfeltrin
@@ -12,19 +18,28 @@ package modeloProcessador;
 public class Processador {
     public Registrador[] registradores = new Registrador[8];
     public Decodificador decodificador;
+    public MP memoriaPrincipal;
+    public MemoriaCache cache;
+    public SREG sreg;
+    public TelaMain tela;
     
-    public Processador(){
+    public Processador(TelaMain tela){
         for(int i = 0; i < 8; i++){
-            this.registradores[i] = new Registrador();
-            this.decodificador = new Decodificador(this);
+            this.registradores[i] = new Registrador();            
         }
+        this.decodificador = new Decodificador(this);
+        this.memoriaPrincipal = new MP();
+        this.cache = new MemoriaCache();
+        this.sreg = new SREG();
+        this.tela = tela;
     }
     
-    public Object[] getValoresRegistradores(){
-        Object[] valores = new Object[8];
-        for(int i = 0; i < 8; i++){
-            valores[i] = this.registradores[i].getValor();
+    public List<Object[]> getValoresRegistradores(){
+        List<Object[]> lista = new ArrayList<>();
+        for(int i = 0; i < 8; i++) {
+            Object []aux = {"R" + i, this.registradores[i].getValor()};
+            lista.add(aux);
         }
-        return valores;
+        return lista;        
     }
 }
