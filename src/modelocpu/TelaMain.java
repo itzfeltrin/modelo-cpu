@@ -337,7 +337,7 @@ public class TelaMain extends javax.swing.JFrame {
         });
         jMenuBar1.add(reset);
 
-        jMenu1.setText("Load Sample");
+        jMenu1.setText("Load Example");
         jMenu1.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -387,9 +387,7 @@ public class TelaMain extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             if(this.currentInst + 1 <= this.proc.memoriaPrincipal.totalIndex()) {
-                System.out.print("Antes: " + this.currentInst);
                 this.proc.decodificador.decodificar((String) tblMP.getModel().getValueAt(this.currentInst, 1));                                            
-                System.out.println("Depois: " + this.currentInst);
                 this.currentInst++;
             }                
             attEverything();
@@ -402,6 +400,7 @@ public class TelaMain extends javax.swing.JFrame {
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         String texto = txtArea.getText();
         String[] instrucoes = texto.split("\n");
+        this.proc.memoriaPrincipal.reset();
         try {
             this.currentInst = 0;
             this.proc.memoriaPrincipal.addInstrucoes(instrucoes);

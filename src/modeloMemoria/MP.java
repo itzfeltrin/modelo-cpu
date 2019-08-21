@@ -31,9 +31,23 @@ public class MP {
     }
     
     public void addInstrucoes(String[] instrucoes) {
+        int j = 0;
         for(int i = 0; i < instrucoes.length; i++) {
-            this.valores[i] = instrucoes[i];
+            if(instrucoes[i].length() > 0) {
+                System.out.println("entrou: " + instrucoes[i].length());
+                this.valores[j] = instrucoes[i];
+                j++;
+            }
+            else {
+                
+            }            
         }        
+    }
+    
+    public void reset() {
+        for(int i = 0; i < this.valores.length; i++) {
+            this.valores[i] = null;
+        }
     }
     
     public int totalIndex() {
